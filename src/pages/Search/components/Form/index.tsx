@@ -32,7 +32,7 @@ function Form( {onSearch}: Props) {
         />
         <button className="btn btn-primary">
           Encontrar
-          </button>
+        </button>
       </form>
     </div>
   );

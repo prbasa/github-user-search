@@ -1,33 +1,51 @@
 import React, { useState } from 'react';
-import UserInfo from './components/UserInfo';
 import Form from './components/Form';
-import axios from 'axios';
+import UserInfo from './components/UserInfo';
 import './styles.css';
-import { User } from './types';
+import ImageLoader from './components/Loaders/ImageLoader';
+import InfoLoader from './components/Loaders/InfoLoader';
+import { User } from '../../core/types/User';
+import { makeRequest } from '../../core/utils/request';
 
-const BASE_URL = 'https://api.github.com/users';
 
-function Search(){
-
+const Search = () => {
     const [userInfo, setUserInfo] = useState<User>();
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSearch = (search: string) => {
-        axios(`${BASE_URL}/${search}`)
-           .then(response => {
-               setUserInfo(response.data);
-           })
+        setIsLoading(true);
+        makeRequest({ url: `users/${search}` })
+            .then(response => setUserInfo(response.data))
+            .catch(() => {
+                alert('Usuário não encontrado');
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }
 
     return (
-        <div className="search-container">
+        <div className="search-container" >
             <Form onSearch={handleSearch} />
-            {
-                userInfo && (
-                    <UserInfo user={userInfo} />
-                )
-            }
+            {isLoading ? (
+                <div className="loaders-content">
+                    <ImageLoader />
+                    <InfoLoader />
+                </div>
+            ) : (
+                    <>
+                        {
+                            userInfo && (
+                                <UserInfo user={userInfo}  />
+                            )
+                        }
+                    </>
+
+                )}
+
         </div>
-    )
-}
+    );
+};
+
 
 export default Search;

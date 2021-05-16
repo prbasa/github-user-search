@@ -1,13 +1,10 @@
+import React from 'react';
 import './App.css';
-import Navbar from './core/components/Navbar';
-import Search from './pages/Search';
+import Routes from './Routes';
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <Search />
-    </>
+    <Routes />
 
   );
 }
