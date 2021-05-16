@@ -3,21 +3,29 @@ import UserInfo from './components/UserInfo';
 import Form from './components/Form';
 import axios from 'axios';
 import './styles.css';
+import { User } from './types';
 
 const BASE_URL = 'https://api.github.com/users';
 
 function Search(){
 
-    const [userInfo, setUserInfo] = useState();
+    const [userInfo, setUserInfo] = useState<User>();
 
     const handleSearch = (search: string) => {
-        axios(`${BASE_URL}/${search}`);
+        axios(`${BASE_URL}/${search}`)
+           .then(response => {
+               setUserInfo(response.data);
+           })
     }
 
     return (
         <div className="search-container">
             <Form onSearch={handleSearch} />
-            <UserInfo />
+            {
+                userInfo && (
+                    <UserInfo user={userInfo} />
+                )
+            }
         </div>
     )
 }
